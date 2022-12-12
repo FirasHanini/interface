@@ -19,32 +19,24 @@ void ajouter_liste(liste l)
 
 
 
-
-
-int nbv ()
+int nbv()
 {
- liste l,a;
- FILE *f1,*f2,*f3;
-int id,v;
-f1=fopen("les_liste.txt","r");
-f2=fopen("listes_vote.txt","r");
-f3=fopen("n.txt","w");
-fprintf(f1,"%s\n","a");
-while(fscanf(f1,"%s %d %s %d %d %d %d %d\n",l.nom_liste,&l.id_liste,l.id_tete_liste,&l.nombre_condidat,&l.date.jour,&l.date.mois,&l.date.annee,&l.nbr_vote)!=EOF){
-id=l.id_liste;
+ int r=0,v=0;
+ liste l,u;
+ FILE *f;
+ f=fopen("listes_vote.txt","r");
+while(fscanf(f,"%s %d %s %d %d %d %d %d\n",l.nom_liste,&l.id_liste,l.id_tete_liste,&l.nombre_condidat,&l.date.jour,&l.date.mois,&l.date.annee,&l.nbr_vote)!=EOF)
+{ u=recherche_liste_id(l.id_liste);
+ v++;
+ u.nbr_vote=v;
+ r=modif_liste(u.id_liste, u );
+ 
+}
+}
 
-v=0;
-while(fscanf(f2,"%s %d %s %d %d %d %d %d\n",a.nom_liste,&a.id_liste,a.id_tete_liste,&a.nombre_condidat,&a.date.jour,&a.date.mois,&a.date.annee,&a.nbr_vote)!=EOF){
-if (id==a.id_liste) v++;
-fprintf(f2,"%s\n",a.nom_liste);
-}
-l.nbr_vote=v;
-fprintf(f3,"%s %d %s %d %d %d %d %d\n",l.nom_liste,l.id_liste,l.id_tete_liste,l.nombre_condidat,l.date.jour,l.date.mois,l.date.annee,l.nbr_vote);
-}
-remove("les_liste.txt");
-rename("n.txt","les_liste.txt");
- return v;
-}
+
+
+
 
 
 
@@ -140,13 +132,13 @@ liste recherche_liste(char nom[])
     {
         while(tr==0 && fscanf(f,"%s %d %s %d %d %d %d %d\n",l.nom_liste,&l.id_liste,l.id_tete_liste,&l.nombre_condidat,&l.date.jour,&l.date.mois,&l.date.annee,&l.nbr_vote)!=EOF)
         {
-            if(strcmp(nom,l.nom_liste)==0)
-                tr=1;
+            if(strcmp(nom,l.nom_liste)==0){
+                tr=1;}
         }
     }
     
-    if(tr==0)
-        l.id_liste=-1;
+    if(tr==0){
+        l.id_liste=-1;}
 	fclose(f);
     return l;
 
@@ -162,13 +154,12 @@ liste recherche_liste_id(int id)
         while(tr==0 && fscanf(f,"%s %d %s %d %d %d %d %d\n",l.nom_liste,&l.id_liste,l.id_tete_liste,&l.nombre_condidat,&l.date.jour,&l.date.mois,&l.date.annee,&l.nbr_vote)!=EOF)
         {
             if(id==l.id_liste)
-                tr=1;
+               { tr=1; }
+             
         }
-    }
     
-    if(tr==0)
-        l.id_liste=-1;
-	fclose(f);
+    }
+ 
     return l;
 
 }

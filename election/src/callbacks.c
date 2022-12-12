@@ -17,7 +17,7 @@
 //ida id liste pour ajout de condidat
 // i_c variable togled button nombre de condidat liste
 // variable test pour inetrface ajout-liste (0 ajouter une liste ; 1 modifier une liste)
-int i_c=0, idl=0, ida=0, test=0;
+int i_c=0, idl=0, ida=0, test=0,check_buton_liste=0 ;
 
 
 
@@ -99,6 +99,7 @@ on_ajout_clicked                       (GtkWidget       *objet,
  GtkWidget *annee;
  GtkWidget *window4;
  GtkWidget *label;
+ GtkWidget *erreur;
  int i=0,j=0,k=0;
  char id_liste[10];
  
@@ -114,7 +115,8 @@ id=lookup_widget(w1,"id_teteliste");
 jour=lookup_widget(w1,"jour");
 mois=lookup_widget(w1,"mois");
 annee=lookup_widget(w1,"annee");
-
+erreur=lookup_widget(w1,"erreur_id");
+gtk_label_set_text(erreur,"");
 // les entrees
 strcpy(l.nom_liste,gtk_entry_get_text(GTK_ENTRY(nom)));
 strcpy(l.id_tete_liste,gtk_entry_get_text(GTK_ENTRY(id)));
@@ -124,9 +126,11 @@ l.date.jour=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jour));
 l.date.mois=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(mois));
 l.date.annee=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(annee));
 l.nbr_vote=0;
+if ((strlen(l.id_tete_liste)<8)|(strlen(l.id_tete_liste)>8)){
+ gtk_label_set_text(erreur,"Ecrire CIN de 8 chiffre");
+}
 
-
-
+else{
 // test si ajout liste ou modif liste
 if (test==0){
 l.id_liste = id_generate();
@@ -147,7 +151,7 @@ l.id_liste=ida;
 k=modif_liste(l.id_liste,l);
 test=0;
 }
-
+}
 }
 
 
@@ -276,8 +280,11 @@ on_listadd_clicked                     (GtkWidget       *objet,
 {
  GtkWidget *window1;
  GtkWidget *window2;
+ 
  window2=lookup_widget(objet,"window2");
  window1=lookup_widget(objet,"window1");
+ 
+ 
  window1=create_window1();
  gtk_widget_show(window1);
  gtk_widget_hide(window2);
@@ -436,6 +443,7 @@ on_button3_clicked                     (GtkWidget       *objet,
 { GtkWidget *nom;
   GtkWidget *window2;
  GtkWidget *window3;
+ GtkWidget *label;
  
   GtkTreeView *tree;
  char noml[20];
@@ -443,17 +451,21 @@ on_button3_clicked                     (GtkWidget       *objet,
  liste l;
  window2=lookup_widget(objet,"window2");
  window3=lookup_widget(objet,"window3");
+ label=lookup_widget(window3,"check");
 
  nom=lookup_widget(objet,"noi");
  window2=create_window2();
  tree=lookup_widget(window2,"treels");
+if(check_buton_liste==1){
  strcpy(noml,gtk_label_get_text(nom));
  l=recherche_liste(noml);
  if( l.id_liste!=-1){
   tr=supprime_liste(l.id_liste);
 }
 afficher_liste(tree);
-gtk_widget_hide(window3);
+gtk_widget_hide(window3);}
+else
+{gtk_label_set_text(label,"*Cocher le bouton");}
  
  
 }
@@ -512,7 +524,7 @@ on_vote2_clicked                       (GtkWidget       *objet,
  GtkWidget *window5;
  GtkWidget *comb;
  liste l;
- 
+ int r1=0;
  char nom [30];
  window5=lookup_widget(objet,"window5");
  comb=lookup_widget(window5,"comboboxentry1");
@@ -520,6 +532,7 @@ on_vote2_clicked                       (GtkWidget       *objet,
  
 l=recherche_liste(nom);
 voter(l);
+r1=nbv ();
 gtk_widget_hide(window5);
 
  }
@@ -534,12 +547,15 @@ on_Return_liste_clicked                (GtkWidget       *objet,
 {
  GtkWidget *window2;
  GtkWidget *window6;
+ GtkTreeView *tree;
  window2=lookup_widget(objet,"window2");
  window6=lookup_widget(objet,"window6");
  window2=create_window2();
  gtk_widget_show(window2);
- window6=create_window6();
+ 
  gtk_widget_hide(window6);
+ tree=lookup_widget(window2,"treels");
+ afficher_liste(tree);
 }
 
 
@@ -569,5 +585,36 @@ on_listes_clicked                      (GtkWidget       *objet,
  main=lookup_widget(objet,"Main");
  
  gtk_widget_hide(main);
+}
+
+
+void
+on_stat_clicked                        (GtkWidget       *objet,
+                                        gpointer         user_data)
+{
+ GtkWidget *w6;
+ GtkWidget *window2;
+ GtkTreeView *tree;
+ int r1=0,r2=0;
+window2=lookup_widget(objet,"window2");
+ w6=lookup_widget(objet,"window6");
+ w6=create_window6();
+ gtk_widget_show(w6);
+ gtk_widget_hide(window2);
+ 
+ r2=l_ordre();
+ tree=lookup_widget(w6,"ordre_liste");
+ afficher_liste_trier(tree);
+
+ 
+ 
+}
+
+
+void
+on_suprimer_toggled                    (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+ if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(togglebutton))){check_buton_liste=1;}
 }
 

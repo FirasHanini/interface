@@ -253,11 +253,6 @@ g_object_unref(store);
 
 
 
-
-
-
-
-
 // treeview listes trier
 
 enum {
@@ -265,7 +260,7 @@ enum {
  Idt,
  Nb_condt,
  Nb_vote,
- COLUMNS
+ COLUMns
 
 };
 
@@ -307,7 +302,7 @@ gtk_tree_view_append_column (GTK_TREE_VIEW(listee),column);
 
 }
 
-store=gtk_list_store_new(COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+store=gtk_list_store_new(COLUMns, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 f=fopen("l_ordre.txt","r");	
 
@@ -333,10 +328,3 @@ g_object_unref(store);
 
 	
 }
-
-
-
-
-
-
-

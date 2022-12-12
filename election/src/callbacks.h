@@ -72,3 +72,11 @@ on_Return_liste_clicked                (GtkWidget       *objet,
 void
 on_listes_clicked                      (GtkWidget       *objet,
                                         gpointer         user_data);
+
+void
+on_stat_clicked                        (GtkWidget       *objet,
+                                        gpointer         user_data);
+
+void
+on_suprimer_toggled                    (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);

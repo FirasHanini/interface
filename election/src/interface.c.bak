@@ -295,7 +295,6 @@ create_window3 (void)
   GtkWidget *noi;
   GtkWidget *button3;
   GtkWidget *suprimer;
-  GtkWidget *check;
 
   window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window3), _("window3"));
@@ -339,11 +338,6 @@ create_window3 (void)
   gtk_fixed_put (GTK_FIXED (fixed3), suprimer, 376, 248);
   gtk_widget_set_size_request (suprimer, 118, 24);
 
-  check = gtk_label_new ("");
-  gtk_widget_show (check);
-  gtk_fixed_put (GTK_FIXED (fixed3), check, 360, 216);
-  gtk_widget_set_size_request (check, 144, 25);
-
   g_signal_connect ((gpointer) treecond, "row_activated",
                     G_CALLBACK (on_treecond_row_activated),
                     NULL);
@@ -367,7 +361,6 @@ create_window3 (void)
   GLADE_HOOKUP_OBJECT (window3, noi, "noi");
   GLADE_HOOKUP_OBJECT (window3, button3, "button3");
   GLADE_HOOKUP_OBJECT (window3, suprimer, "suprimer");
-  GLADE_HOOKUP_OBJECT (window3, check, "check");
 
   return window3;
 }
