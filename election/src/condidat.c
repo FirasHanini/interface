@@ -252,20 +252,91 @@ g_object_unref(store);
 
 
 
-// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-utilisateur chercher_user(char * fileuser,char cin[])
+
+
+
+
+
+
+// treeview listes trier
+
+enum {
+ Nomlt,
+ Idt,
+ Nb_condt,
+ Nb_vote,
+ COLUMNS
+
+};
+
+
+
+void afficher_liste_trier(GtkTreeView   *listee)
 {
-	utilisateur u;
-	int trouve=0;
-	FILE * f=fopen(fileuser,"r");
-	if(f!=NULL)
-	{
-		while(trouve==0 && fscanf(f,"%s %s %d %d %d %s %s %s %d %d %s %s %s \n",u.nom_user,u.prenom_user,&u.date.jour,&u.date.mois,&u.date.annee,u.cin_user,u.role_user,u.genre_user,&u.num_bv_user,&u.vote_user,u.nationalite_obs,u.app_politique_obs,u.profession_obs)!=EOF)
-		{
-			if(strcmp(u.cin_user,cin)==0)
-				trouve=1;
-		}
-	}
-	fclose(f);
-	return u;
+ //Declarations
+GtkCellRenderer *renderer;
+GtkTreeViewColumn *column;
+GtkTreeIter iter;
+GtkListStore *store;
+
+
+char id[12],nb_cond[5],nom[30],nb_vote[20];	
+liste l;
+FILE *f;
+store=NULL;
+
+
+store=gtk_tree_view_get_model(listee);
+if(store==NULL)
+{
+ renderer=gtk_cell_renderer_text_new();
+column=gtk_tree_view_column_new_with_attributes("Nom",renderer,"text",Nomlt,NULL);
+gtk_tree_view_append_column(GTK_TREE_VIEW(listee),column);
+
+ renderer=gtk_cell_renderer_text_new();
+column=gtk_tree_view_column_new_with_attributes("Identifiant",renderer,"text",Idt,NULL);
+gtk_tree_view_append_column(GTK_TREE_VIEW(listee),column);
+
+renderer=gtk_cell_renderer_text_new();
+column=gtk_tree_view_column_new_with_attributes("Nombre de condidat",renderer,"text",Nb_condt,NULL);
+gtk_tree_view_append_column (GTK_TREE_VIEW(listee),column);
+
+renderer=gtk_cell_renderer_text_new();
+column=gtk_tree_view_column_new_with_attributes("Nombre de votes",renderer,"text",Nb_vote,NULL);
+gtk_tree_view_append_column (GTK_TREE_VIEW(listee),column);
+
 }
+
+store=gtk_list_store_new(COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+f=fopen("l_ordre.txt","r");	
+
+if (f==NULL){ return;}	
+else {f=fopen("l_ordre.txt","a+");
+
+while (fscanf(f,"%s %d %s %d %d %d %d %d\n",l.nom_liste,&l.id_liste,l.id_tete_liste,&l.nombre_condidat,&l.date.jour,&l.date.mois,&l.date.annee,&l.nbr_vote)!=EOF)
+{
+sprintf(nb_vote,"%d",l.nbr_vote);
+sprintf(id,"%d",l.id_liste);
+sprintf(nb_cond,"%d",l.nombre_condidat);
+strcpy(nom,l.nom_liste);
+ gtk_list_store_append (store,&iter);
+gtk_list_store_set(store,&iter,Nomlt,nom,Idt,id,Nb_condt,nb_cond,Nb_vote,nb_vote,-1);
+
+}}
+fclose(f);
+gtk_tree_view_set_model(GTK_TREE_VIEW(listee),GTK_TREE_MODEL(store));
+g_object_unref(store);
+
+	
+
+
+	
+}
+
+
+
+
+
+
+
